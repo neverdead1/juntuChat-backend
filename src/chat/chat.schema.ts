@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { Usuario } from './usuario.schema';
+import { Usuario } from 'src/usuario/usuario.schema';
 
 @Schema()
 export class Chat extends Document {

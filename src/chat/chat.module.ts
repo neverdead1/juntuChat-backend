@@ -3,10 +3,11 @@ import { ChatService } from './chat.service';
 import { ChatGateway } from './chat.gateway';
 
 import { MongooseModule } from '@nestjs/mongoose';
-import { Usuario, UsuarioSchema } from 'src/schemas/usuario.schema';
-import { Chat, ChatSchema } from 'src/schemas/chat.schema';
-import { Mensaje, MensajeSchema } from 'src/schemas/mensaje.schema';
-import { Grupo, GrupoSchema } from 'src/schemas/grupo.schema';
+
+import { Grupo, GrupoSchema } from 'src/grupo/grupo.schema';
+import { Mensaje, MensajeSchema } from 'src/mensaje/mensaje.schema';
+import { Usuario, UsuarioSchema } from 'src/usuario/usuario.schema';
+import { Chat, ChatSchema } from './chat.schema';
 
 @Module({
   providers: [ChatGateway, ChatService],

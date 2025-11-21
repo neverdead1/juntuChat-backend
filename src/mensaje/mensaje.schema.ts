@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { Usuario } from './usuario.schema';
-import { Chat } from './chat.schema';
+
+import { Chat } from 'src/chat/chat.schema';
+import { Usuario } from 'src/usuario/usuario.schema';
 
 @Schema({ timestamps: true })
 export class Mensaje extends Document {
@@ -13,10 +14,6 @@ export class Mensaje extends Document {
 
   @Prop({ required: true })
   mensaje: string;
-
-  // timestamps crea automáticamente:
-  // createdAt
-  // updatedAt
 }
 
 export const MensajeSchema = SchemaFactory.createForClass(Mensaje);
