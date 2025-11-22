@@ -7,10 +7,10 @@ import { Usuario } from 'src/usuario/usuario.schema';
 @Schema({ timestamps: true })
 export class Mensaje extends Document {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Chat', required: true })
-  id_chat: Chat;
+  id_chat: mongoose.Types.ObjectId;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Usuario', required: true })
-  id_usuario: Usuario;
+  id_usuario: mongoose.Types.ObjectId;
 
   @Prop({ required: true })
   mensaje: string;

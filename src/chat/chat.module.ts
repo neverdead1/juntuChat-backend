@@ -9,6 +9,7 @@ import { Mensaje, MensajeSchema } from 'src/mensaje/mensaje.schema';
 import { Usuario, UsuarioSchema } from 'src/usuario/usuario.schema';
 import { Chat, ChatSchema } from './chat.schema';
 
+
 @Module({
   providers: [ChatGateway, ChatService],
   imports:   [

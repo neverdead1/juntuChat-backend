@@ -1,26 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
+import { Grupo } from 'src/grupo/grupo.schema';
 import { Usuario } from 'src/usuario/usuario.schema';
 
 @Schema()
 export class Chat extends Document {
-  @Prop({ required: true, enum: ['individual', 'grupo'] })
+  @Prop({ required: true, enum: ['grupo'] })
   tipo_chat: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' }] })
-  usuarios: Usuario[];
+  usuarios: mongoose.Types.ObjectId[];
 
-  @Prop({
-    type: {
-      id_grupo: { type: mongoose.Schema.Types.ObjectId },
-      nombre_grupo: String,
-    },
-    required: false,
-  })
-  grupo?: {
-    id_grupo: mongoose.Schema.Types.ObjectId;
-    nombre_grupo: string;
-  };
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Grupo' })
+  grupo: Grupo;
 }
 
-export const ChatSchema = SchemaFactory.createForClass(Chat);
+export const ChatSchema = SchemaFactory.createForClass(Chat); 
