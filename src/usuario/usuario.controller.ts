@@ -37,4 +37,12 @@ export class UsuarioController {
   actualizar(@Param('id') id: string, @Body() dto: CrearUsuarioDto) {
     return this.usuarioService.actualizar(id, dto);
   }
+
+  @Post('ids')
+  async obtenerIds(@Body('correos') correos: string[]) {
+    // buscar usuarios por correo
+    const usuarios = await this.usuarioService.obtenerPorCorreos(correos);
+    // devolver solo los _id
+    return { ids: usuarios.map(u => u._id) };
+  }
 }

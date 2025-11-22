@@ -49,6 +49,9 @@ export class UsuarioService {
     };
   }
 
+  async obtenerPorCorreos(correos: string[]): Promise<Usuario[]> {
+    return this.usuarioModel.find({ correo: { $in: correos } }).exec();
+  } 
   
   async loginGoogle(dto: { correo: string; nombre: string }) {
     let usuario = await this.usuarioModel.findOne({ correo: dto.correo });
