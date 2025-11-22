@@ -18,6 +18,11 @@ export class UsuarioController {
     return this.usuarioService.login(dto);
   }
 
+  @Post('login-google')
+  loginGoogle(@Body() dto: { correo: string; nombre: string }) {
+    return this.usuarioService.loginGoogle(dto);
+  }
+
   @Get()
   obtenerTodos() {
     return this.usuarioService.obtenerTodos();
