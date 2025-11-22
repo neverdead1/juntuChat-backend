@@ -26,4 +26,9 @@ export class GrupoController {
   async agregarUsuario(@Param('id') id: string, @Body('usuarioId') usuarioId: string) {
     return this.grupoService.agregarUsuario(id, usuarioId);
   }
+
+  @Get('usuario/:usuarioId')
+  obtenerGruposUsuario(@Param('usuarioId') usuarioId: string) {
+    return this.grupoService.obtenerGruposPorUsuario(usuarioId);
+  }
 }

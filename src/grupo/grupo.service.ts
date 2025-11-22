@@ -74,5 +74,13 @@ export class GrupoService {
 
     return { mensaje: 'Usuario agregado al grupo y chat correctamente', grupo, chat };
   }
+  
+  // src/grupo/grupo.service.ts
+  async obtenerGruposPorUsuario(usuarioId: string): Promise<Grupo[]> {
+    return this.grupoModel
+      .find({ usuarios: usuarioId })
+      .populate('id_chat')
+      .exec();
+  }
 
 }
