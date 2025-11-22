@@ -5,12 +5,16 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsuarioController } from './usuario/usuario.controller';
 import { UsuarioService } from './usuario/usuario.service';
 import { UsuarioModule } from './usuario/usuario.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     ChatModule,
     MongooseModule.forRoot('mongodb+srv://jhoanmijael_db_user:mYFYupBeXAeujodZ@chatcolaborativo.m8cvux3.mongodb.net/?appName=chatColaborativo'),
-    UsuarioModule
+    UsuarioModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
   ],
   controllers: [],
   providers: [], //"ChatGateway" exportamos el getway creado de chat.gateway
