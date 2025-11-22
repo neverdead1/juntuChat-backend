@@ -5,46 +5,54 @@ import mongoose, { Model } from 'mongoose';
 import { Grupo } from './grupo.schema';
 import { CrearGrupoDto } from './dto/crear-grupo.dto';
 import { Chat } from 'src/chat/chat.schema';
+import { GrupoGateway } from './grupo.gateway';
 
 @Injectable()
 export class GrupoService {
   constructor(
     @InjectModel(Grupo.name) private grupoModel: Model<Grupo>,
-    @InjectModel(Chat.name) private chatModel: Model<Chat>
+    @InjectModel(Chat.name) private chatModel: Model<Chat>,
+    private readonly grupoGateway: GrupoGateway,
   ) {}
 
   // Crear grupo
- async crear(dto: CrearGrupoDto): Promise<Grupo> {
-    // validar grupo duplicado
+  async crear(dto: CrearGrupoDto): Promise<Grupo> {
     const existe = await this.grupoModel.findOne({ nombre_grupo: dto.nombre_grupo });
     if (existe) throw new BadRequestException('El grupo ya existe');
 
-    // 1️⃣ crear el chat
+    // crear chat
     const chat = new this.chatModel({
       tipo_chat: 'grupo',
       usuarios: dto.usuarios || [],
     });
     await chat.save();
 
-    // 2️⃣ crear el grupo con referencia al chat
+    // crear grupo
     const grupo = new this.grupoModel({
       nombre_grupo: dto.nombre_grupo,
       descripcion: dto.descripcion,
       usuarios: dto.usuarios || [],
-      id_chat: chat._id, // aquí usamos el id del chat recién creado
+      id_chat: chat._id,
     });
 
     await grupo.save();
 
-    return grupo;
+    // obtener poblado
+    const grupoPopulado = await this.grupoModel
+      .findById(grupo._id)
+      .populate("id_chat")
+      .lean();
+
+    // 🔥 Emitir a websocket
+    this.grupoGateway.emitirGrupoCreado(grupoPopulado);
+
+    return grupoPopulado as any;
   }
 
-  // Obtener todos los grupos
   async obtenerTodos(): Promise<Grupo[]> {
     return this.grupoModel.find().populate('id_chat').exec();
   }
 
-  // Obtener grupo por id
   async obtenerPorId(id: string): Promise<Grupo> {
     const grupo = await this.grupoModel.findById(id).populate('id_chat').exec();
     if (!grupo) throw new NotFoundException('Grupo no encontrado');
@@ -57,13 +65,11 @@ export class GrupoService {
 
     const userObjectId = new mongoose.Types.ObjectId(usuarioId);
 
-    // Evita duplicados en el grupo
     if (!grupo.usuarios.some(u => u.equals(userObjectId))) {
       grupo.usuarios.push(userObjectId);
       await grupo.save();
     }
 
-    // Actualizar chat correspondiente
     const chat = await this.chatModel.findById(grupo.id_chat);
     if (!chat) throw new NotFoundException('Chat del grupo no encontrado');
 
@@ -72,15 +78,14 @@ export class GrupoService {
       await chat.save();
     }
 
-    return { mensaje: 'Usuario agregado al grupo y chat correctamente', grupo, chat };
+    return { mensaje: 'Usuario agregado correctamente', grupo, chat };
   }
-  
-  // src/grupo/grupo.service.ts
+
   async obtenerGruposPorUsuario(usuarioId: string): Promise<Grupo[]> {
     return this.grupoModel
       .find({ usuarios: usuarioId })
       .populate('id_chat')
       .exec();
   }
-
 }
+
