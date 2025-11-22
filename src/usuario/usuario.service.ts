@@ -1,9 +1,11 @@
 //logica del negocio usa el esquema para crear un usuario
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Usuario } from './usuario.schema';
 import { CrearUsuarioDto } from './dto/crear-usuario.dto';
+import { LoginUsuarioDto } from './dto/login-usuario.dto';
+
 
 @Injectable()
 export class UsuarioService {
@@ -27,5 +29,21 @@ export class UsuarioService {
 
   async actualizar(id: string, dto: CrearUsuarioDto): Promise<Usuario | null> {
   return this.usuarioModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+  }
+
+  async login(dto: LoginUsuarioDto) {
+    const usuario = await this.usuarioModel.findOne({ correo: dto.correo });
+
+    if (!usuario) {
+      throw new NotFoundException('Correo no registrado');
+    }
+
+    if (usuario.contrasena !== dto.contrasena) {
+      throw new UnauthorizedException('Contraseña incorrecta');
+    }
+    return {
+      mensaje: 'Login exitoso',
+      usuario,
+    };
   }
 }
