@@ -31,4 +31,5 @@ export class GrupoController {
   obtenerGruposUsuario(@Param('usuarioId') usuarioId: string) {
     return this.grupoService.obtenerGruposPorUsuario(usuarioId);
   }
+
 }

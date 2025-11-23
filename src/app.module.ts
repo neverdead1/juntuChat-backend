@@ -18,6 +18,7 @@ import { GrupoModule } from './grupo/grupo.module';
     MongooseModule.forRoot(process.env.MONGO_URI!),
     UsuarioModule,
     GrupoModule,
+    MensajeModule
   ],
   controllers: [],
   providers: [], //"ChatGateway" exportamos el getway creado de chat.gateway

@@ -1,7 +1,7 @@
 // src/grupo/grupo.service.ts
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 import { Grupo } from './grupo.schema';
 import { CrearGrupoDto } from './dto/crear-grupo.dto';
 import { Chat } from 'src/chat/chat.schema';
