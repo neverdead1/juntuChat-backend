@@ -15,19 +15,16 @@ export class GrupoService {
     private readonly grupoGateway: GrupoGateway,
   ) {}
 
-  // Crear grupo
   async crear(dto: CrearGrupoDto): Promise<Grupo> {
     const existe = await this.grupoModel.findOne({ nombre_grupo: dto.nombre_grupo });
     if (existe) throw new BadRequestException('El grupo ya existe');
 
-    // crear chat
     const chat = new this.chatModel({
       tipo_chat: 'grupo',
       usuarios: dto.usuarios || [],
     });
     await chat.save();
 
-    // crear grupo
     const grupo = new this.grupoModel({
       nombre_grupo: dto.nombre_grupo,
       descripcion: dto.descripcion,
@@ -37,13 +34,11 @@ export class GrupoService {
 
     await grupo.save();
 
-    // obtener poblado
     const grupoPopulado = await this.grupoModel
       .findById(grupo._id)
       .populate("id_chat")
       .lean();
 
-    // 🔥 Emitir a websocket
     this.grupoGateway.emitirGrupoCreado(grupoPopulado);
 
     return grupoPopulado as any;

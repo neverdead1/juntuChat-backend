@@ -5,17 +5,16 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
-  // Esto activa las validaciones de todos los DTOs
-  // Habilitar CORS
+  
   app.enableCors({
-    origin: 'http://localhost:3000', // permite tu frontend
+    origin: 'http://localhost:3000', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    credentials: true, // si necesitas cookies/sesiones
+    credentials: true, 
   });
   app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,       // elimina propiedades que no están en el DTO
-    forbidNonWhitelisted: true, // lanza error si hay propiedades extras
-    transform: true,       // convierte los tipos automáticamente
+    whitelist: true,       
+    forbidNonWhitelisted: true, 
+    transform: true,       
   }));
   
   const port = process.env.PORT ?? 3000;

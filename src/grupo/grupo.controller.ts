@@ -1,4 +1,3 @@
-// src/grupo/grupo.controller.ts
 import { Controller, Get, Post, Param, Body } from '@nestjs/common';
 import { GrupoService } from './grupo.service';
 import { CrearGrupoDto } from './dto/crear-grupo.dto';

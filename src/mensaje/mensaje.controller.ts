@@ -7,13 +7,11 @@ export class MensajeController {
   grupoService: any;
   constructor(private readonly mensajeService: MensajeService) {}
 
-  /** Crear mensaje */
   @Post()
   crear(@Body() dto: CreateMensajeDto) {
     return this.mensajeService.crear(dto);
   }
 
-  /** Obtener mensajes por chat */
   @Get('chat/:id_chat')
   obtenerPorChat(
     @Param('id_chat') id_chat: string,
@@ -25,7 +23,6 @@ export class MensajeController {
     return this.mensajeService.obtenerPorChat(id_chat, pageNum, limitNum);
   }
 
-  /** Obtener mensajes por grupo */
   @Get('grupo/:id_grupo')
   obtenerPorGrupo(
     @Param('id_grupo') id_grupo: string,

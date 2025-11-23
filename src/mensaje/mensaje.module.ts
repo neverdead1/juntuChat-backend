@@ -4,7 +4,7 @@ import { Mensaje, MensajeSchema } from './mensaje.schema';
 import { MensajeController } from './mensaje.controller';
 import { MensajeService } from './mensaje.service';
 import { Chat, ChatSchema } from 'src/chat/chat.schema';
-import { MensajeGateway } from './mensaje.gateway'; // <--- 1. IMPORTAR
+import { MensajeGateway } from './mensaje.gateway'; 
 
 @Module({
   imports: [
@@ -14,6 +14,6 @@ import { MensajeGateway } from './mensaje.gateway'; // <--- 1. IMPORTAR
     ]),
   ],
   controllers: [MensajeController],
-  providers: [MensajeService, MensajeGateway], // <--- 2. AGREGAR AQUÍ
+  providers: [MensajeService, MensajeGateway], 
 })
 export class MensajeModule {}

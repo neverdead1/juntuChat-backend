@@ -1,7 +1,7 @@
 import { WebSocketGateway, WebSocketServer, OnGatewayInit } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 
-@WebSocketGateway({ cors: true }) // Permite conexiones desde tu frontend
+@WebSocketGateway({ cors: true }) 
 export class GrupoGateway implements OnGatewayInit {
   @WebSocketServer()
   server: Server;

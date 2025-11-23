@@ -12,6 +12,6 @@ export class CrearGrupoDto {
   @IsOptional()
   @IsArray()
   @ArrayNotEmpty()
-  @IsMongoId({ each: true }) // cada elemento del array debe ser un ObjectId válido
+  @IsMongoId({ each: true }) 
   usuarios?: string[];
 }

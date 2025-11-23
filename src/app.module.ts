@@ -21,6 +21,6 @@ import { GrupoModule } from './grupo/grupo.module';
     MensajeModule
   ],
   controllers: [],
-  providers: [], //"ChatGateway" exportamos el getway creado de chat.gateway
+  providers: [], 
 })
 export class AppModule {}
