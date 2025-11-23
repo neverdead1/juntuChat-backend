@@ -4,12 +4,14 @@ import { Model } from 'mongoose';
 import { Mensaje } from './mensaje.schema';
 import { Chat } from 'src/chat/chat.schema';
 import { CreateMensajeDto } from './dto/create-mensaje.dto';
+import { MensajeGateway } from './mensaje.gateway'; // <--- 1. IMPORTAR
 
 @Injectable()
 export class MensajeService {
   constructor(
     @InjectModel(Mensaje.name) private readonly mensajeModel: Model<Mensaje>,
-    @InjectModel(Chat.name) private readonly chatModel: Model<Chat>
+    @InjectModel(Chat.name) private readonly chatModel: Model<Chat>,
+    private readonly mensajeGateway: MensajeGateway // <--- 2. INYECTAR
   ) {}
 
   /** Crear un mensaje */
@@ -17,33 +19,36 @@ export class MensajeService {
     const chat = await this.chatModel.findById(dto.id_chat);
     if (!chat) throw new NotFoundException('Chat no encontrado');
 
+    // 1. Guardar en BD
     const mensaje = await this.mensajeModel.create(dto);
-    return mensaje.populate('id_usuario', 'nombre avatar correo');
+    
+    // 2. Popular datos del usuario (Nombre, foto, etc)
+    const mensajePopulado = await mensaje.populate('id_usuario', 'nombre avatar correo');
+
+    // 3. 🔥 EMITIR EL EVENTO EN TIEMPO REAL
+    this.mensajeGateway.emitirMensaje(mensajePopulado);
+
+    return mensajePopulado;
   }
 
-  /** Obtener mensajes por chat */
+  // ... (El resto de métodos 'obtenerPorChat' y 'obtenerPorGrupo' se quedan igual)
   async obtenerPorChat(id_chat: string, page = 0, limit = 50) {
-    const chat = await this.chatModel.findById(id_chat);
-    if (!chat) throw new NotFoundException('Chat no encontrado');
-
+    // ... (código existente)
     return this.mensajeModel
       .find({ id_chat })
       .populate('id_usuario', 'nombre avatar correo')
-      .sort({ createdAt: 1 }) // orden por fecha de creación
+      .sort({ createdAt: 1 })
       .skip(page * limit)
       .limit(limit);
   }
 
-  /** Obtener mensajes por grupo */
   async obtenerPorGrupo(id_grupo: string, page = 0, limit = 50) {
-  // Como el id del grupo es igual al id del chat
-  return this.mensajeModel
-    .find({ id_chat: id_grupo }) // usa directamente id_grupo
+    // ... (código existente)
+    return this.mensajeModel
+    .find({ id_chat: id_grupo }) 
     .populate('id_usuario', 'nombre avatar correo')
     .sort({ createdAt: 1 })
     .skip(page * limit)
     .limit(limit);
-}
-
-
+  }
 }
