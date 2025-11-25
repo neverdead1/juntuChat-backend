@@ -80,6 +80,7 @@ export class GrupoService {
     return this.grupoModel
       .find({ usuarios: usuarioId })
       .populate('id_chat')
+      .populate('usuarios', 'nombre correo') // <--- AGREGAR ESTA LÍNEA
       .exec();
   }
 }
